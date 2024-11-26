@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('friend_id')->constrained(
                 table: 'users', indexName: 'friend_id'
             );
-            
+            $table->smallInteger('status')->default(0);
             $table->timestamps();
         });
     }

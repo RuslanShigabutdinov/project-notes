@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('notes', function (Blueprint $table) {
             $table->id();
-            $table->string('tite');
+            $table->string('title');
             $table->text('content');
             $table->text('image')->nullable();
             $table->string('text_color')->default('#333');

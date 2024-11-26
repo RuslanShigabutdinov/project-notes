@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\{
+    HasMany,
+    BelongsToMany
+};
 
 class User extends Authenticatable
 {
@@ -21,6 +25,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar',
     ];
 
     /**
@@ -42,4 +47,21 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function createdNotes(): HasMany
+    {
+        return $this->hasMany(Note::class, 'creator_id');
+    }
+    public function guestNotes(): BelongsToMany
+    {
+        return $this->belongsToMany(Note::class, 'user_notes');
+    }
+    public function friends()
+    {
+        return $this->belongsToMany(self::class, 'friends', 'user_id', 'friend_id')->withPivot('status');
+    }
+    public function friendRequests()
+    {
+        return $this->belongsToMany(self::class, 'friends', 'friend_id', 'user_id')->where('status', 0);
+    }
 }
